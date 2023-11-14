@@ -29,7 +29,7 @@ Todo App in Python and Next.js
 
 4. Run docker compose
     ```sh
-    docker compose up -d
+    docker compose up -d --build
     ```
 
 5. To stop the project run
