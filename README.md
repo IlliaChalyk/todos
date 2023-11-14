@@ -18,21 +18,21 @@ Todo App in Python and Next.js
 
 1. Clone the project 
     ```sh
-    foo@bar:~$ git clone git@github.com:IlliaChalyk/todos.git
+    git clone git@github.com:IlliaChalyk/todos.git
     ```
 
 2. cd into the todos folder
     ```sh
-    foo@bar:~$ cd todos
+    cd todos
     ```
 3. Copy `.env.example` and rename it to `.env`. *For local setup, default values in the example file should be satisfactory*
 
 4. Run docker compose
     ```sh
-    foo@bar:~$ docker compose up -d
+    docker compose up -d
     ```
 
 5. To stop the project run
     ```sh
-    foo@bar:~$ docker compose down
+    docker compose down
     ```
