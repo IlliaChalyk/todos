@@ -20,6 +20,9 @@ services:
   db:
     image: postgres:16.0
     container_name: db
+    restart: always
+    volumes:
+      - ./.data:/var/lib/postgresql/data
     ports:
       - ${DB_PORT:-5432}:5432
     environment:
