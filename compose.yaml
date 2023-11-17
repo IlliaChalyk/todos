@@ -11,9 +11,11 @@ services:
     ports:
       - ${API_PORT}:8000
     environment:
-      - DB_USER=${DB_USER:-postgres}
-      - DB_PASSWORD==${DB_PASSWORD:-postgres}
-      - DB_NAME==${DB_NAME:-todos}
+      DB_USER: ${DB_USER:-postgres}
+      DB_PASSWORD: ${DB_PASSWORD:-postgres}
+      DB_NAME: ${DB_NAME:-todos}
+      DB_HOST: ${DB_HOST:-db}
+      DEBUG: 1
     depends_on:
       - db
   
@@ -26,6 +28,6 @@ services:
     ports:
       - ${DB_PORT:-5432}:5432
     environment:
-      - POSTGRES_USER=${DB_USER:-postgres}
-      - POSTGRES_PASSWORD=${DB_PASSWORD:-postgres}
-      - POSTGRES_DB=${DB_NAME:-todos}
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+      POSTGRES_DB: ${DB_NAME:-todos}
