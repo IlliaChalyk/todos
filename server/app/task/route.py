@@ -1,41 +1,33 @@
-from http import HTTPStatus
+from typing import Annotated
 from uuid import UUID
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Depends, status
+from sqlalchemy.orm import Session
 
-from app.task.model import Task
-from app.task.model import Image
+from app.database import get_db
+from app.task import crud
+from app.task.dto import TaskCreate, Task
 
 
 router = APIRouter(prefix='/tasks')
 
-# TODO: replace with an actual db
-tasks = [
-    Task(name="Task 1", description="Task 1 Description",
-         is_done=False, password='123456'),
-    Task(name="Test task 123", description="Task 2 Description",
-         is_done=False, password='123456'),
-    Task(name="Task 3", description="Task 3 Description",
-         is_done=False, password='123456'),
-    Task(name="Task 4", description="Task 4 Description",
-         is_done=False, password='123456'),
-    Task(name="Task 5", description="Task 5 Description",
-         is_done=False, password='123456', images=[Image(url='http://buket123.s3.aws.com/images/1')])
-]
+db_dependency = Annotated[Session, Depends(get_db)]
 
 
-@router.get('/')
-async def get_all_tasks() -> list[Task]:
-    return tasks
+@router.get('/', response_model=list[Task])
+async def get_all_tasks(db: db_dependency, offset: int = 0, limit: int = 100):
+    return await crud.get_all_tasks(db, offset, limit)
 
 
-@router.get('/{id}')
-async def get_task(id: UUID) -> Task:
-    if not any(task.id == id for task in tasks):
-        raise HTTPException(HTTPStatus.NOT_FOUND, f'Task with {id=} not found')
-    return next(task for task in tasks if task.id == id)
+@router.post('/', response_model=Task)
+async def create_task(db: db_dependency, task: TaskCreate):
+    return await crud.create_task(db, task)
 
 
-@router.post('/')
-async def create_task(task: Task) -> Task:
-    tasks.append(task)
-    return task
+@router.get('/{task_id}', response_model=Task)
+async def get_task(db: db_dependency, task_id: UUID):
+    return await crud.get_task_by_id(db, task_id)
+
+
+@router.delete('/{task_id}', status_code=status.HTTP_204_NO_CONTENT)
+async def delete_task(db: db_dependency, task_id: UUID):
+    pass
